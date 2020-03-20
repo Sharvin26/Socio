@@ -163,7 +163,7 @@ exports.getAuthenticatedUser = (request, response) => {
     }).then(data => {
         userData.likes = [];
         data.forEach(doc => {
-            userData.Likes.push(doc.data)
+            userData.Likes.push(doc.data())
         });
         return response.json(userData);
     })
