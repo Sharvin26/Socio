@@ -150,3 +150,25 @@ exports.uploadImage = (request, response) => {
     });
     busboy.end(request.rawBody);
 };
+// Get own user details
+exports.getAuthenticatedUser = (request, response) => {
+    let userData = {};
+    db.doc(`/users/${request.user.handle}`).get()
+    .then(doc => {
+        if(doc.exists){
+            userData.userCredentials = doc.data();
+            return db.collection('likes')
+            .where('userHandle', '==', request.user.handle).get();
+        }
+    }).then(data => {
+        userData.likes = [];
+        data.forEach(doc => {
+            userData.Likes.push(doc.data)
+        });
+        return response.json(userData);
+    })
+    .catch(err =>{
+        console.error(err);
+        return response.status(500).json({error:error.code});
+    })
+};

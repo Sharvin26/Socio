@@ -8,7 +8,7 @@ let db = {
             imageUrl: 'image/adaawdwd/fwqeqweq',
             bio: 'Sample bio info',
             website: 'https://user.com',
-            location: 'sample country'
+            location: 'Sample country'
         }
     ],
     screams: [
@@ -20,4 +20,28 @@ let db = {
             commentCount: 2
         }
     ]
-}
+};
+
+const userDetails = {
+    // Redux data
+    credentials: {
+        userId: "awjkbajdbjandjand",
+        email: "user@email.com",
+        handle: "user",
+        createdAt: "2020-03-19T14:29:38.852Z",
+        imageUrl: "image/adaawdwd/fwqeqweq",
+        bio: "Sample bio info",
+        website: "https://user.com",
+        location: "Sample country",
+    },
+    Likes: [
+        {
+            userHandle: "user",
+            screamId: "wdjidjiawljdl"
+        },
+        {
+            userHandle: "user",
+            screamId: "dbwkjdbwjbdkj"
+        }
+    ]
+};
