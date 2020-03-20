@@ -170,3 +170,24 @@ exports.unLikeScream = (request, response) => {
         response.status(500).json({error:err.code});
     });
 };
+// Delete a Scream
+exports.deleteScream = (request, response) => {
+    const document = db.doc(`/screams/${request.params.screamId}`)
+    document.get()
+    .then(doc => {
+        if(!doc.exists){
+            return response.status(404).json({error:"Scream not found"})
+        }
+        if(doc.data().userHandle !== request.user.handle){
+            return response.status(403).json({error:"UnAuthorized"})
+        }else{
+            return document.delete()
+        }
+    })
+    .then(()=> {
+        response.json({message:"Delete successfully"});
+    }).catch(err=>{
+        console.error(err);
+        response.status(500).json({error:err.code});
+    })
+}
