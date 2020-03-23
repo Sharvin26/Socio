@@ -12,12 +12,18 @@ exports.getAllScreams = (request, response) => {
 					screamId: doc.id,
 					body: doc.data().body,
 					userHandle: doc.data().userHandle,
-					createdAt: doc.data().createdAt
+					createdAt: doc.data().createdAt,
+					commentCount: doc.data().commentCount,
+					likeCount: doc.data().likeCount,
+					userImage: doc.data().userImage
 				});
 			});
 			return response.json(screams);
 		})
-		.catch((err) => console.error(err));
+		.catch((err) => {
+			console.error(err);
+			return response.status(500).json({ error: err.code});
+		});
 };
 // Create new Scream
 exports.postOneScream = (request, response) => {
@@ -78,7 +84,7 @@ exports.getScream = (request, response) => {
 };
 // Post a Comment
 exports.commentOnScream = (request, response) => {
-	if (request.body.body.trim() == '') return response.status(400).json({ error: 'Must not be empty' });
+	if (request.body.body.trim() == '') return response.status(400).json({ comment: 'Must not be empty' });
 	const newComment = {
 		body: request.body.body,
 		createdAt: new Date().toISOString(),

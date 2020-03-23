@@ -55,7 +55,7 @@ exports.signup = (request, response) => {
 			if (err.code === 'auth/email-already-in-use') {
 				return response.status(400).json({ email: 'Email already in use' });
 			} else {
-				return response.status(500).json({ error: err.code });
+				return response.status(500).json({ general: 'Something went wrong, please try again' });
 			}
 		});
 };
@@ -80,10 +80,7 @@ exports.login = (request, response) => {
 		})
 		.catch((err) => {
 			console.error(err);
-			if (err.code === 'auth/wrong-password') {
-				return response.status(403).json({ general: 'wrong credentials, please try again' });
-			}
-			return response.status(500).json({ error: err.code });
+			return response.status(403).json({ general: 'wrong credentials, please try again' });
 		});
 };
 // Add User details
@@ -152,36 +149,40 @@ exports.uploadImage = (request, response) => {
 // Get any user details
 exports.getUserDetails = (request, response) => {
 	let userData = {};
-	db.doc(`/users/${request.params.handle}`).get()
-	.then(doc =>{
-		if(doc.exists){
-			userData.user = doc.data();
-			return db.collection('screams')
-			.where('userHandle', '==', request.params.handle)
-			.orderBy('createdAt', 'desc')
-			.get();
-		}else{
-			return response.status(404).json({ error: 'user not found' });
-		}
-	}).then(data=>{
-		userData.screams = [];
-		data.forEach(doc=>{
-			userData.screams.push({
-				body: doc.data().body,
-				userHandle: doc.data().userHandle,
-				createdAt: doc.data().createdAt,
-				userImage: doc.data().userImage,
-				likeCount: doc.data().likeCount,
-				commentCount: doc.data().commentCount,
-				screamId: doc.id
-			})
+	db
+		.doc(`/users/${request.params.handle}`)
+		.get()
+		.then((doc) => {
+			if (doc.exists) {
+				userData.user = doc.data();
+				return db
+					.collection('screams')
+					.where('userHandle', '==', request.params.handle)
+					.orderBy('createdAt', 'desc')
+					.get();
+			} else {
+				return response.status(404).json({ error: 'user not found' });
+			}
+		})
+		.then((data) => {
+			userData.screams = [];
+			data.forEach((doc) => {
+				userData.screams.push({
+					body: doc.data().body,
+					userHandle: doc.data().userHandle,
+					createdAt: doc.data().createdAt,
+					userImage: doc.data().userImage,
+					likeCount: doc.data().likeCount,
+					commentCount: doc.data().commentCount,
+					screamId: doc.id
+				});
+			});
+			return response.json(userData);
+		})
+		.catch((err) => {
+			console.error(err);
+			return response.status(500).json({ error: err.code });
 		});
-		return response.json(userData)
-	})
-	.catch((err) => {
-		console.error(err);
-		return response.status(500).json({ error: err.code});
-	})
 };
 // Get own user details
 exports.getAuthenticatedUser = (request, response) => {
@@ -200,14 +201,16 @@ exports.getAuthenticatedUser = (request, response) => {
 			data.forEach((doc) => {
 				userData.Likes.push(doc.data());
 			});
-			return db.collection('notifications')
-			.where('receipent', '==', request.user.handle)
-			.orderBy('createdAt', 'desc')
-			.limit(10).get();
+			return db
+				.collection('notifications')
+				.where('receipent', '==', request.user.handle)
+				.orderBy('createdAt', 'desc')
+				.limit(10)
+				.get();
 		})
 		.then((data) => {
 			userData.notifications = [];
-			data.forEach((doc) =>{
+			data.forEach((doc) => {
 				userData.notifications.push({
 					receipent: doc.data().receipent,
 					sender: doc.data().sender,
@@ -216,7 +219,7 @@ exports.getAuthenticatedUser = (request, response) => {
 					type: doc.data().type,
 					read: doc.data().read,
 					notificationId: doc.id
-				})
+				});
 			});
 			return response.json(userData);
 		})
@@ -228,16 +231,17 @@ exports.getAuthenticatedUser = (request, response) => {
 // Mark notifications read
 exports.markNotificationsRead = (request, response) => {
 	let batch = db.batch();
-	request.body.forEach(notificationId => {
-		const notification = db.doc(`/notifications/${notificationId}`)
-		batch.update(notification, {read: true});
+	request.body.forEach((notificationId) => {
+		const notification = db.doc(`/notifications/${notificationId}`);
+		batch.update(notification, { read: true });
 	});
-	batch.commit()
-	.then(() => {
-		return response.json({message:"Notification mark read"});
-	})
-	.catch(err=>{
-		console.error(err);
-		return response.status(500).json({error: err.code});
-	});
+	batch
+		.commit()
+		.then(() => {
+			return response.json({ message: 'Notification mark read' });
+		})
+		.catch((err) => {
+			console.error(err);
+			return response.status(500).json({ error: err.code });
+		});
 };
