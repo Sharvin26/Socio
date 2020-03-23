@@ -67,10 +67,4 @@ functions/package-lock.json
 .firebaserc
 functions/util/config.js
 view/package-lock.json
-view/public/index.html
-view/public/favicon.ico
-view/public/logo192.png
-view/public/logo512.png
-view/public/manifest.json
-view/public/robots.txt
 view/README.md
