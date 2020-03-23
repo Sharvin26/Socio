@@ -15,12 +15,14 @@ Configure the firebase SDK and install all the required packages.
 
 Packages dependencies:
 
-1. React
+1. react
 2. express
 3. firebase
 4. firebase-functions
 5. firebase-admin
 6. busboy
+7. react-router-dom
+8. material-ui/core
 
 To install the packages go to the `functions` directory and install the dependencies using the following command:
 
