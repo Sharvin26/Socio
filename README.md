@@ -1,12 +1,26 @@
+This is a social network platform with features like:
+
+1. Register.
+2. Login.
+3. Add a new post. ( Known as scream in platform )
+4. Delete scream.
+5. View other users scream.
+6. Like scream.
+7. comment on scream.
+8. unLike scream.
+9. Update own profile.
+
+
 Configure the firebase SDK and install all the required packages.
 
 Packages dependencies:
 
-1. express
-2. firebase
-3. firebase-functions
-4. firebase-admin
-5. busboy
+1. React
+2. express
+3. firebase
+4. firebase-functions
+5. firebase-admin
+6. busboy
 
 To install the packages go to the `functions` directory and install the dependencies using the following command:
 
@@ -27,4 +41,16 @@ module.exports = {
     appId: "....",
     measurementId: "...."
 };
+```
+
+To run the firebase server locally use the following command:
+
+```
+firebase serve
+```
+
+To deploy on the firebase use the following command:
+
+```
+firebase deploy
 ```
