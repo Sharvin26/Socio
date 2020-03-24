@@ -24,6 +24,7 @@ Packages dependencies:
 7. react-router-dom
 8. material-ui/core
 9. axios
+10. dayjs
 
 To install the packages go to the `functions` directory and install the dependencies using the following command:
 
