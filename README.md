@@ -25,6 +25,7 @@ Packages dependencies:
 8. material-ui/core
 9. axios
 10. dayjs
+11. jwt-decode
 
 To install the packages go to the `functions` directory and install the dependencies using the following command:
 
