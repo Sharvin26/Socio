@@ -17,7 +17,7 @@ exports.signup = (request, response) => {
 
 	const { valid, errors } = validateSignUpData(newUser);
 
-	if (!valid) return response.status(400).json({ errors });
+	if (!valid) return response.status(400).json(errors);
 
 	const noImage = 'noImage.png';
 
